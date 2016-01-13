@@ -6,7 +6,12 @@ import numpy as np
 
 
 class VideoCamera(object):
+    '''This class provides video frame stream for REST endpoint.'''
+
     def __init__(self, size):
+        '''Constructor. Initializes video camera and sets frame width and height
+        parameters.'''
+        
         self.stream = cv2.VideoCapture(0)
         self.size = size
         self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, size)
@@ -14,10 +19,15 @@ class VideoCamera(object):
         self.frame = np.zeros((size, size, 3), dtype=np.uint8)
 
     def __del__(self):
+        '''Destructor. Deinitializes video camera.'''
+
         self.stream.release()
         cv2.destroyAllWindows()
 
     def get_frame(self):
+        '''Reads frame from video camera, transforms it into hologram format and
+        returns it encoded as JPG.'''
+
         success, frame = self.stream.read()
         for i in xrange(self.size / 2):
             part = frame[i, i:self.size - i - 1]
